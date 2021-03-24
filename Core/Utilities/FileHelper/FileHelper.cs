@@ -10,8 +10,16 @@ namespace Core.Utilities.FileHelper
 {
     public class FileHelper
     {
+
+
+
+
+       
         public static IResult Add(string filePath, IFormFile file)
         {
+            
+
+            
             var tempPath = Path.GetTempFileName();
             if (file.Length > 0)
             {
@@ -27,6 +35,7 @@ namespace Core.Utilities.FileHelper
             }
             return new SuccessResult();
         }
+       
 
         public static IResult Delete(string filePath)
         {
@@ -55,7 +64,7 @@ namespace Core.Utilities.FileHelper
             }
             return new ErrorResult($"Desteklenmeyen Dosya Formatı: {extension}");
         }
-        
+
 
     }
 }

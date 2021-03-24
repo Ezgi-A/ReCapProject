@@ -56,6 +56,10 @@ namespace Business.Constants
         public static string UserRegistered = "Kullanıcı başarıyla kaydedildi";
         public static string AccessTokenCreated = "Access token başarıyla oluşturuldu";
         public static string AuthorizationDenied = "Yetkiniz yok.";
-        
+        public static string CardAdded = "Kart Eklendi";
+        public static string CardDeleted = "Kart Silindi";
+        internal static string CardUpdated = "Kart güncellendi";
+        internal static string NotExist = "Kart bulunamadı";
+        public static string CardInvalid = "Kart Geçersiz";
     }
 }

@@ -95,6 +95,15 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
+        
+
+        public IDataResult<List<Car>> GetCarByBrandAndColor(int brandId, int colorId)
+        {
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == brandId && c.ColorId == colorId));
+        }
+
+
+
         //public IDataResult<List<Car>> GetAllByBrand(int brandId)
         //{
         //    return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.BrandId == brandId));

@@ -13,14 +13,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Business.Concrete
 {
     public class CarImageManager : ICarImageService
     {
+        
         ICarImageDal _carImageDal;
         ICarService _carService;
-        string imagePath = @"..\WebAPI\Images\";
+        string imagePath = @"\WebAPI\Images\";
         string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp" };
 
         public CarImageManager(ICarImageDal carImageDal, ICarService carService)
@@ -33,7 +35,8 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Add(CarImage carImage, IFormFile file)
         {
-            carImage.ImagePath = imagePath + FileHelper.GenerateGUIDFileName(file, 20);
+            //imagePath+
+            carImage.ImagePath = FileHelper.GenerateGUIDFileName(file, 20);
             carImage.Date = DateTime.Now;
 
             IResult result = BusinessRules.Run(CheckIfCarExists(carImage.CarId), CheckIfImagesLimitExceded(carImage.CarId),
@@ -62,8 +65,9 @@ namespace Business.Concrete
         [ValidationAspect(typeof(CarImageValidator))]
         public IResult Update(CarImage carImage, IFormFile file)
         {
+            //imagePath+
             string deletePath = _carImageDal.Get(ci => ci.ImageId == carImage.ImageId).ImagePath;
-            carImage.ImagePath = imagePath + FileHelper.GenerateGUIDFileName(file, 20);
+            carImage.ImagePath = FileHelper.GenerateGUIDFileName(file, 20);
             carImage.Date = DateTime.Now;
 
             IResult result = BusinessRules.Run(CheckIfCarExists(carImage.CarId), CheckIfImagesLimitExceded(carImage.CarId),
@@ -103,7 +107,9 @@ namespace Business.Concrete
         }
         public IDataResult<List<CarImage>> CheckIfCarImageNull(int carId)
         {
-            string logoPath = imagePath + "logo.jpg";
+            //imagePath+
+
+            string logoPath = "logo.jpg";
             var result = _carImageDal.GetAll(ci => ci.CarId == carId).Any();
             if (result == false)
             {
@@ -143,113 +149,6 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-        //ICarImageDal _carImageDal;
 
-        //public CarImageManager(ICarImageDal carImageDal)
-        //{
-        //    _carImageDal = carImageDal;
-        //}
-
-        //[ValidationAspect(typeof(CarImageValidator))]
-        //public IResult Add(IFormFile file, CarImage carImage)
-        //{
-        //    IResult result = BusinessRules.Run(
-        //        CheckIfImageLimit(carImage.CarId)
-        //        );
-
-        //    if (result != null)
-        //    {
-        //        return result;
-        //    }
-
-        //    carImage.ImagePath = FileHelper.AddAsync(file);
-        //    carImage.Date = DateTime.Now;
-        //    _carImageDal.Add(carImage);
-        //    return new SuccessResult();
-        //}
-
-        //[ValidationAspect(typeof(CarImageValidator))]
-        //public IResult Update(IFormFile file, CarImage carImage)
-        //{
-        //    var oldpath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.ImageId == carImage.ImageId).ImagePath;
-        //    carImage.ImagePath = FileHelper.UpdateAsync(oldpath, file);
-        //    carImage.Date = DateTime.Now;
-        //    _carImageDal.Update(carImage);
-        //    return new SuccessResult();
-
-        //}
-
-        //[ValidationAspect(typeof(CarImageValidator))]
-        //public IResult Delete(CarImage carImage)
-        //{
-        //    var oldpath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..\\..\\..\\wwwroot")) + _carImageDal.Get(p => p.ImageId == carImage.ImageId).ImagePath;
-
-        //    IResult result = BusinessRules.Run(
-        //        FileHelper.DeleteAsync(oldpath));
-
-        //    if (result != null)
-        //    {
-        //        return result;
-        //    }
-
-        //    _carImageDal.Delete(carImage);
-        //    return new SuccessResult();
-        //}
-
-        //public IDataResult<CarImage> Get(int id)
-        //{
-        //    return new SuccessDataResult<CarImage>(_carImageDal.Get(p => p.ImageId == id));
-        //}
-
-        //public IDataResult<List<CarImage>> GetAll()
-        //{
-        //    return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
-        //}
-
-        //public IDataResult<List<CarImage>> GetImagesByCarId(int id)
-        //{
-        //    IResult result = BusinessRules.Run(CheckIfCarImageNull(id));
-
-        //    if (result != null)
-        //    {
-        //        return new ErrorDataResult<List<CarImage>>(result.Message);
-        //    }
-
-        //    return new SuccessDataResult<List<CarImage>>(CheckIfCarImageNull(id).Data);
-        //}
-
-        //private IDataResult<List<CarImage>> CheckIfCarImageNull(int id)
-        //{
-        //    try
-        //    {
-        //        string path = @"\Images\default.jpg";
-        //        var result = _carImageDal.GetAll(c => c.CarId == id).Any();
-        //        if (!result)
-        //        {
-        //            List<CarImage> carimage = new List<CarImage>();
-        //            carimage.Add(new CarImage { CarId = id, ImagePath = path, Date = DateTime.Now });
-        //            return new SuccessDataResult<List<CarImage>>(carimage);
-        //        }
-        //    }
-        //    catch (Exception exception)
-        //    {
-
-        //        return new ErrorDataResult<List<CarImage>>(exception.Message);
-        //    }
-
-        //    return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(p => p.CarId == id).ToList());
-        //}
-
-
-        //private IResult CheckIfImageLimit(int carid)
-        //{
-        //    var carImagecount = _carImageDal.GetAll(p => p.CarId == carid).Count;
-        //    if (carImagecount >= 5)
-        //    {
-        //        return new ErrorResult(Messages.FailAddedImageLimit);
-        //    }
-
-        //    return new SuccessResult();
-        //}
     }
 }

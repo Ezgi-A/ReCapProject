@@ -2,8 +2,10 @@
 using Business.Constants;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
+using Core.Utilities.Security.Hashing;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -43,9 +45,9 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(_ıuserDal.Get(u => u.UserId == Userid));
         }
 
-        public User GetByMail(string email)
+        public IDataResult<User> GetByMail(string email)
         {
-            return _ıuserDal.Get(e => e.Email == email);
+            return new SuccessDataResult<User>(_ıuserDal.Get(e => e.Email == email));
         }
 
         public List<OperationClaim> GetClaims(User user)
@@ -57,6 +59,28 @@ namespace Business.Concrete
         {
             _ıuserDal.Update(user);
             return new SuccessResult(Messages.UserUpdating);
+        }
+
+        public IResult UpdateForUser(UpdateForUserDto user)
+        {
+            byte[] passwordHash;
+            byte[] passwordSalt;
+
+            HashingHelper.CreatePasswordHash(user.Password, out passwordHash, out passwordSalt);
+
+            var userInfo = new User()
+            {
+                UserId = user.UserId,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                Status = true
+            };
+
+            _ıuserDal.Update(userInfo);
+            return new SuccessResult();
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Entities.DTOs
         public int BrandId { get; set; }
         public int ColorId { get; set; }
         public bool IsAvailable { get; set; }
+        public int? MinimumFindex { get; set; }
 
 
     }

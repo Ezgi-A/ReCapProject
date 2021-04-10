@@ -7,21 +7,29 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Entities.DTOs;
+using Core.Utilities.BusinessRules;
+
 namespace Business.Concrete
 {
     public class RentalManager : IRentalService
     {
         IRentalDal _rentalDal;
-        public RentalManager(IRentalDal rentaldal)
+        ICarDal _carDal;
+        ICustomerDal _customerDal;
+        public RentalManager(IRentalDal rentaldal,ICarDal cardal,ICustomerDal customerdal)
         {
             _rentalDal = rentaldal;
+            _carDal = cardal;
+            _customerDal = customerdal;
         }
 
         public IResult Add(Rental rental)
         {
-            if (rental.ReturnDate==null)
+            var result = BusinessRules.Run(CheckFindex(rental.CustomerId, rental.CarId));
+
+            if (result!=null)
             {
-                return new ErrorResult(Messages.RentalInvalid);
+                return result;
             }
             _rentalDal.Add(rental);
             return new SuccessResult(Messages.RentalAdding);
@@ -56,6 +64,22 @@ namespace Business.Concrete
         {
             _rentalDal.Update(rental);
             return new SuccessResult(Messages.RentalUpdating);
+        }
+
+        public IResult CheckFindex(int customerId, int carId)
+        {
+            var car = _carDal.Get(c => c.CarId == carId);
+            var customer = _customerDal.Get(cu => cu.CustomerId == customerId);
+
+            var carFindex = car.MinimumFindex;
+            var customerFindex = customer.Findex;
+
+            if (customerFindex >= carFindex)
+            {
+                return new SuccessResult();
+            }
+            return new ErrorResult(Messages.FindexNotEnough);
+            
         }
     }
 }

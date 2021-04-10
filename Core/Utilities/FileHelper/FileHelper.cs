@@ -1,70 +1,43 @@
-﻿using Core.Utilities.Results;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-
 namespace Core.Utilities.FileHelper
 {
     public class FileHelper
     {
-
-
-
-
-       
-        public static IResult Add(string filePath, IFormFile file)
+        public static string Add(IFormFile image)
         {
-            
+            string directory = Environment.CurrentDirectory + @"\wwwroot\";
+            string fileName = CreateNewFileName(image.FileName);
 
-            
-            var tempPath = Path.GetTempFileName();
-            if (file.Length > 0)
+            string path = Path.Combine(directory, "Images");
+            if (!Directory.Exists(path))
             {
-                using (var stream = new FileStream(tempPath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
+                Directory.CreateDirectory(path);
             }
-            File.Move(tempPath, filePath);
-            if (!File.Exists(filePath))
+            using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
             {
-                return new ErrorResult();
+                image.CopyTo(stream);
             }
-            return new SuccessResult();
-        }
-       
 
-        public static IResult Delete(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                return new ErrorResult("Dosya Bulunamadı.");
-            }
-            File.Delete(filePath);
-            return new SuccessResult();
+            string filePath = Path.Combine(path, fileName);
+            return fileName;
         }
 
-        public static string GenerateGUIDFileName(IFormFile file, int length)
+        public static string CreateNewFileName(string fileName)
         {
-            return Guid.NewGuid().ToString().Substring(0, length) + new FileInfo(file.FileName).Extension;
+            string[] file = fileName.Split('.');
+            string extension = file[1];
+            string newFileName = string.Format(@"{0}." + extension, Guid.NewGuid());
+            return newFileName;
         }
 
-        public static IResult CheckFileType(IFormFile file, string[] extensions)
+        public static void Delete(string path)
         {
-            var extension = new FileInfo(file.FileName).Extension;
-            foreach (var ext in extensions)
-            {
-                if (ext == extension)
-                {
-                    return new SuccessResult();
-                }
-            }
-            return new ErrorResult($"Desteklenmeyen Dosya Formatı: {extension}");
+            File.Delete(path);
         }
-
-
     }
 }

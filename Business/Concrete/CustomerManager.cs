@@ -35,12 +35,12 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Customer>>(_ıcustomerDal.GetAll(), Messages.Maintenance);
             }
-            return new SuccessDataResult<List<Customer>>(_ıcustomerDal.GetAll(), Messages.RentalListing);
+            return new SuccessDataResult<List<Customer>>(_ıcustomerDal.GetAll(), Messages.CustomerListing);
         }
 
-        public IDataResult<Customer> GetById(int Customerid)
+        public IDataResult<List<CustomerDetailDto>> GetById(int Customerid)
         {
-            return new SuccessDataResult<Customer>(_ıcustomerDal.Get(c => c.CustomerId == Customerid));
+            return new SuccessDataResult<List<CustomerDetailDto>>(_ıcustomerDal.GetCustomersDetail(c => c.CustomerId == Customerid));
         }
 
         public IDataResult<List<CustomerDetailDto>> GetCustomersDetail()

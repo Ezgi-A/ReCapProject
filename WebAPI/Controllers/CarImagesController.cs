@@ -16,8 +16,8 @@ namespace WebAPI.Controllers
     public class CarImagesController : ControllerBase
     {
 
-        ICarImageService2 _carImageService2;
-        public CarImagesController(ICarImageService2 carImageService2)
+        ICarImageService _carImageService2;
+        public CarImagesController(ICarImageService carImageService2)
         {
             _carImageService2 = carImageService2;
         }
@@ -88,8 +88,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+
+        //------------------------------------------------------------------
         //ICarImageService _carImageService;
-       
+
 
 
         //[HttpGet("getall")]
@@ -114,16 +116,7 @@ namespace WebAPI.Controllers
         //    return BadRequest(result);
         //}
 
-        //[HttpGet("getcarImagesbycarid")]
-        //public IActionResult GetCarImagesByCarId(int carId)
-        //{
-        //    var result = _carImageService2.GetCarImagesByCarId(carId);
-        //    if (result.Success)
-        //    {
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(result);
-        //}
+
 
         //[HttpGet("checkifcarimagenull")]
         //public IActionResult CheckIfCarImageNull(int carId)
@@ -168,7 +161,7 @@ namespace WebAPI.Controllers
         //    }
         //    return BadRequest(result);
         //}
-        
+
 
     }
 }

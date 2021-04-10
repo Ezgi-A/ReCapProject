@@ -50,6 +50,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CreditCard>>(_creditCardDal.GetAll());
         }
 
+        public IDataResult<List<CreditCard>> GetByCustomerId(int customerId)
+        {
+            return new SuccessDataResult<List<CreditCard>>(_creditCardDal.GetAll(c => c.CustomerID == customerId));
+        }
+
         public IResult GetList(List<CreditCard> list)
         {
             throw new NotImplementedException();

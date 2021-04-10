@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Entities.Concrete;
 using Entities.Concrete;
+using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -66,6 +67,26 @@ namespace WebAPI.Controllers
         {
             var result = _userService.Update(user);
             if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpGet("getbymail")]
+        public IActionResult GetByMail(string email)
+        {
+            var result = _userService.GetByMail(email);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+        [HttpPost("updateforuser")]
+        public IActionResult UpdateForUser(UpdateForUserDto user)
+        {
+            var result = _userService.UpdateForUser(user);
+            if(result.Success)
             {
                 return Ok(result);
             }

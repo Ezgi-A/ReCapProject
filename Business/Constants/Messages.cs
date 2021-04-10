@@ -61,5 +61,9 @@ namespace Business.Constants
         internal static string CardUpdated = "Kart güncellendi";
         internal static string NotExist = "Kart bulunamadı";
         public static string CardInvalid = "Kart Geçersiz";
+        internal static string CarImagesUpdated;
+        internal static string NotExistImage = "Resim bulunamadı";
+        internal static string FindexNotEnough = "Findex yeterli değil";
+        internal static string FindexValid = "Findex geçerli";
     }
 }

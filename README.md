@@ -1,5 +1,8 @@
 # ReCapProject
 
+Linkedln: https://www.linkedin.com/in/ezgi-arslan-2a8885166/
+Mail: ezgiarslan26@gmail.com
+
 Araba Kiralama Projesi/Backend-Visual Studio
 
 Araba Kiralama üzerine oluşturulan bir E-ticaret sisteminin backend kodlarını Visual Studio'da bir .NET Core projesi geliştirdim. API üzerinden postmanda projeyi test ettim. Daha sonrasında
